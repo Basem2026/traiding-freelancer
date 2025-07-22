@@ -142,6 +142,48 @@
       transform: translateY(-5px) scale(1.02);
       box-shadow: 0 12px 25px rgba(0,0,0,0.2);
     }
+
+    /* خلفية قسم الخدمات */
+    .bg-services {
+      background: url('images/services-bg.jpg') no-repeat center center/cover;
+      position: relative;
+      color: white;
+    }
+    .bg-services::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+    .bg-services .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* خلفية قسم تواصل معنا */
+    .bg-contact {
+      background: url('images/contact-bg.jpg') no-repeat center center/cover;
+      position: relative;
+      color: white;
+    }
+    .bg-contact::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+    .bg-contact .container {
+      position: relative;
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
@@ -232,7 +274,7 @@
 </section>
 
 <!-- Services -->
-<section class="bg-light py-5">
+<section class="bg-services py-5" id="services">
   <div class="container">
     <h2 class="section-title">الخدمات</h2>
     <ul class="list-unstyled">
@@ -293,33 +335,8 @@
   </div>
 </section>
 
-<!-- Academy Services -->
-<section class="py-5 bg-light">
-  <div class="container">
-    <h2 class="section-title text-center">🏦 خدمات متكاملة لإدارة رؤوس الأموال</h2>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">📊 نظام ترشيح المنحنى الأمثل</h5>
-            <p class="card-text">تحليل شخصية المتداول وعمل منحنى مخاطر مخصص يتناسب مع أهدافه واستثماراته</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">🛡️ إدارة المخاطر المؤسسية</h5>
-            <p class="card-text">بروتوكولات متكاملة لإدارة رؤوس الأموال الكبيرة وفق معايير المؤسسات المالية</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- Contact -->
-<section class="bg-light py-5">
+<section class="bg-contact py-5" id="contact">
   <div class="container">
     <h2 class="section-title">📞 تواصل معي</h2>
     <p>إذا كان لديك أي استفسارات أو ترغب في مناقشة مشروع معين، لا تتردد في التواصل معي عبر:</p>
