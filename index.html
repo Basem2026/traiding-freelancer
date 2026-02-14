@@ -1,234 +1,1097 @@
-<html lang="ar" dir="rtl"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Trading Freelancer - باسم عيد</title>
-  <meta name="description" content="منصة باسم عيد لتطوير أدوات التداول الذكية - خبرة في MQL4/MQL5، TradingView، وربط الأنظمة بمنصات الفوركس">
-  <meta name="keywords" content="تداول, برمجة MQL4, MQL5, باسم عيد, أدوات تداول, TradingView, MT4, MT5, استراتيجيات تداول, اكسبيرت, مؤشرات">
-  <meta name="author" content="Basem Eid">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> باسم عيد - مبرمجاتي انظمة التداول | HFT • AI • MTP • cTrader</title>
+    <!-- Font Awesome 6 (مجاني) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Bootstrap 5 RTL (للهيكلة الأساسية) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <style>
+        /* ===== متغيرات وأساسيات ===== */
+        :root {
+            --primary: #0a0c1a;
+            --secondary: #1a1d32;
+            --accent-1: #00f2fe;
+            --accent-2: #4facfe;
+            --grad-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --grad-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --grad-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --grad-gold: linear-gradient(135deg, #f5b42b 0%, #f5d0b3 100%);
+            --text-light: #e0e0e0;
+            --text-dim: #a0a0b0;
+            --glow: 0 0 20px rgba(0, 242, 254, 0.5);
+            --card-bg: rgba(26, 29, 50, 0.7);
+            --border-glow: 1px solid rgba(79, 172, 254, 0.3);
+        }
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <style>
-    html { scroll-behavior: smooth; }
-    :root {
-      --clr-primary-1:#1e3c72;
-      --clr-primary-2:#2a5298;
-      --clr-grad-hero-start:#667eea;
-      --clr-grad-hero-end:#764ba2;
-      --clr-accent-1:#8e2de2;
-      --clr-accent-2:#4a00e0;
-    }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background:#f4f4f4;
-      line-height:1.7;
-    }
-    /* Hero */
-    .hero {
-      background: linear-gradient(135deg,var(--clr-grad-hero-start) 0%,var(--clr-grad-hero-end) 100%);
-      position:relative;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      color:#fff;
-      overflow:hidden;
-    }
-    .hero-content {position:relative;z-index:2;padding:5rem 1rem;max-width:900px;margin:auto;text-align:center;}
-    @media (min-width:768px){.hero-content{text-align:start;}}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary);
+            color: var(--text-light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-    .hero-circles{position:absolute;inset:0;margin:0;padding:0;list-style:none;z-index:1;overflow:hidden;}
-    .hero-circles li{position:absolute;display:block;background:rgba(255,255,255,.12);animation:animate 25s linear infinite;bottom:-150px;border-radius:4px;}
-    .hero-circles li:nth-child(1){width:40px;height:40px;left:25%;}
-    .hero-circles li:nth-child(2){width:60px;height:60px;left:10%;animation-delay:2s;animation-duration:18s;}
-    .hero-circles li:nth-child(3){width:20px;height:20px;left:70%;animation-delay:4s;}
-    .hero-circles li:nth-child(4){width:80px;height:80px;left:40%;animation-delay:0s;animation-duration:22s;}
-    .hero-circles li:nth-child(5){width:50px;height:50px;left:85%;animation-delay:6s;animation-duration:20s;}
-    @keyframes animate {
-      0% {transform:translateY(0) rotate(0deg);opacity:1;border-radius:0;}
-      100% {transform:translateY(-1000px) rotate(720deg);opacity:0;border-radius:50%;}
-    }
+        /* ===== التحميل الأولي ===== */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(79, 172, 254, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-1);
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-    .hero h1 {font-size:3.5rem;text-shadow:0 2px 10px rgba(0,0,0,.3);animation:glow 2s ease-in-out infinite alternate;}
-    @keyframes glow {from {text-shadow:0 0 10px #fff;}to {text-shadow:0 0 20px #fff,0 0 30px var(--clr-primary-1);}}
-    @keyframes pulse {from {transform:scale(1) rotate(5deg);}to {transform:scale(1.03) rotate(5deg);}}
+        /* ===== شريط التنقل ===== */
+        .navbar {
+            background: rgba(10, 12, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: var(--border-glow);
+            padding: 1rem 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(10, 12, 26, 0.95);
+            box-shadow: 0 5px 30px rgba(0,0,0,0.5);
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--grad-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-link {
+            color: var(--text-light) !important;
+            margin: 0 0.5rem;
+            position: relative;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-link:hover {
+            color: var(--accent-1) !important;
+            text-shadow: var(--glow);
+        }
+        .nav-link.active {
+            color: var(--accent-1) !important;
+        }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--grad-3);
+            border-radius: 2px;
+        }
 
-    /* Sections */
-    .section-title {font-weight:800;font-size:3rem;margin-bottom:30px;color:var(--clr-accent-2);position:relative;padding-bottom:15px;text-transform:uppercase;letter-spacing:1px;text-shadow:0 2px 10px rgba(74,0,224,.2);}
-    .section-title:after {content:'';position:absolute;bottom:0;inset-inline-start:0;width:100px;height:4px;background:linear-gradient(to right,var(--clr-primary-1),var(--clr-primary-2));border-radius:4px;}
+        /* ===== Hero Section مع Animation ===== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: var(--primary);
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(79, 172, 254, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 242, 254, 0.15) 0%, transparent 50%);
+        }
+        .floating-circles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .circle {
+            position: absolute;
+            background: rgba(79, 172, 254, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        .gradient-text {
+            background: var(--grad-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(79, 172, 254, 0.1);
+            border: var(--border-glow);
+            border-radius: 50px;
+            color: var(--accent-1);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(5px);
+            animation: badgePulse 3s infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(79, 172, 254, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(79, 172, 254, 0.6); }
+        }
 
-    /* Tags */
-    .tag {display:inline-block;background:linear-gradient(45deg,var(--clr-accent-1),var(--clr-accent-2));color:#fff;border-radius:50px;padding:10px 24px;margin:7px;font-size:1.05rem;font-weight:600;box-shadow:0 6px 20px rgba(142,45,226,.3);transition:all .3s;}
-    .tag:hover {transform:translateY(-3px);box-shadow:0 6px 20px rgba(30,60,114,.4);}
+        /* ===== إحصائيات ===== */
+        .stat-box {
+            background: var(--card-bg);
+            border: var(--border-glow);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+            text-align: center;
+        }
+        .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--glow);
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--grad-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    /* Images */
-    img.project-img {max-width:100%;border-radius:10px;margin-top:15px;box-shadow:0 8px 20px rgba(0,0,0,.15);transition:.3s;}
-    img.project-img:hover {transform:translateY(-5px) scale(1.02);box-shadow:0 12px 25px rgba(0,0,0,.2);}
+        /* ===== بطاقات المهارات ===== */
+        .skill-category {
+            background: var(--card-bg);
+            border: var(--border-glow);
+            border-radius: 30px;
+            padding: 2rem;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+        .skill-category:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--glow);
+        }
+        .skill-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.3rem;
+            background: rgba(79, 172, 254, 0.1);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            border-radius: 50px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .skill-tag:hover {
+            background: var(--accent-1);
+            color: var(--primary);
+            transform: scale(1.05);
+            border-color: var(--accent-1);
+        }
 
-    .bg-services {position:relative;color:#fff;background:url('images/chart-bg.jpg') no-repeat center center/cover;}
-    .bg-services::before {content:'';position:absolute;inset:0;background:rgba(0,0,0,.65);z-index:0;}
-    .bg-services .container {position:relative;z-index:1;}
+        /* ===== بطاقات الخدمات ===== */
+        .service-card {
+            background: var(--card-bg);
+            border: var(--border-glow);
+            border-radius: 30px;
+            padding: 2rem;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, var(--accent-1), transparent 30%);
+            animation: rotate 4s linear infinite;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .service-card:hover::before {
+            opacity: 0.3;
+        }
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+        .service-icon {
+            font-size: 3rem;
+            background: var(--grad-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+        .feature-list li {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+        .feature-list li i {
+            color: var(--accent-1);
+            margin-left: 0.5rem;
+            font-size: 0.8rem;
+        }
 
-    .bg-contact {position:relative;color:#fff;background:url('images/contact-bg.jpg') no-repeat center center/cover;background-attachment:fixed;}
-    .bg-contact::before {content:'';position:absolute;inset:0;background:rgba(0,0,0,.70);z-index:0;backdrop-filter:blur(2px);}
-    .bg-contact .container {position:relative;z-index:1;}
-    .contact a {text-decoration:none;color:#0dcaf0;font-weight:bold;}
-    .contact a:hover{text-decoration:underline;}
+        /* ===== معرض الأعمال مع فلتر ===== */
+        .portfolio-filter {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        .filter-btn {
+            padding: 0.7rem 1.8rem;
+            background: transparent;
+            border: var(--border-glow);
+            border-radius: 50px;
+            color: var(--text-light);
+            font-weight: 600;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--grad-3);
+            color: var(--primary);
+            border-color: transparent;
+            box-shadow: var(--glow);
+        }
+        .portfolio-item {
+            margin-bottom: 2rem;
+            transition: 0.3s;
+            display: block;
+        }
+        .portfolio-card {
+            background: var(--card-bg);
+            border: var(--border-glow);
+            border-radius: 20px;
+            padding: 1.5rem;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+        .portfolio-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--glow);
+        }
+        .portfolio-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: rgba(79, 172, 254, 0.2);
+            border-radius: 50px;
+            color: var(--accent-1);
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        .tech-stack span {
+            background: rgba(255,255,255,0.1);
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+        }
 
-    footer {background:#222;color:#aaa;padding:20px 0;text-align:center;font-size:.9rem;}
-    footer a{text-decoration:none;color:#fff;}
-    .text-md-right{text-align:center;}
-    @media (min-width:768px){.text-md-right{text-align:end;}}
-    @media (max-width:575.98px){.hero h1{font-size:2.25rem;} .section-title{font-size:2.25rem;}}
+        /* ===== بطاقات الأسعار ===== */
+        .pricing-card {
+            background: var(--card-bg);
+            border: var(--border-glow);
+            border-radius: 30px;
+            padding: 2.5rem 2rem;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+            position: relative;
+            text-align: center;
+        }
+        .pricing-card.featured {
+            border: 2px solid var(--accent-1);
+            transform: scale(1.05);
+            box-shadow: var(--glow);
+        }
+        .pricing-card.featured::before {
+            content: '⭐ الأكثر طلباً';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--grad-3);
+            color: var(--primary);
+            padding: 0.3rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .price {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--grad-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1rem 0;
+        }
+        .price small {
+            font-size: 1rem;
+            color: var(--text-dim);
+        }
 
-    /* Scroll to Top */
-    #toTop {position:fixed;bottom:20px;left:20px;z-index:999;display:none;background:var(--clr-accent-1);color:#fff;padding:10px 15px;border-radius:50%;cursor:pointer;box-shadow:0 0 10px rgba(0,0,0,.3);}
-    #toTop:hover {background:var(--clr-accent-2);}
-  </style>
+        /* ===== شهادات العملاء ===== */
+        .testimonial-card {
+            background: var(--card-bg);
+            border: var(--border-glow);
+            border-radius: 20px;
+            padding: 2rem;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+        }
+        .stars {
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+        .client-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .client-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-1);
+        }
+
+        /* ===== قسم التواصل ===== */
+        .contact-card {
+            background: var(--card-bg);
+            border: var(--border-glow);
+            border-radius: 20px;
+            padding: 2rem;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 15px;
+            transition: 0.3s;
+            color: var(--text-light);
+            text-decoration: none;
+            margin: 0.5rem 0;
+        }
+        .contact-link:hover {
+            background: rgba(79, 172, 254, 0.1);
+            transform: translateX(-10px);
+            color: var(--accent-1);
+        }
+        .broker-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.3rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .broker-link:hover {
+            background: var(--grad-3);
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        /* ===== زر العودة للأعلى ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--grad-3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            transform: scale(1.1);
+            box-shadow: var(--glow);
+        }
+
+        /* ===== تذييل الصفحة ===== */
+        footer {
+            background: var(--secondary);
+            border-top: var(--border-glow);
+            padding: 3rem 0 1rem;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .pricing-card.featured { transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
 
-<!-- Header -->
-<header class="hero">
-  <ul class="hero-circles"><li></li><li></li><li></li><li></li><li></li></ul>
-  <div class="container hero-content">
-    <div class="row align-items-center gy-5">
-      <div class="col-md-4 text-center">
-        
-      </div>
-      <div class="col-md-8">
-        <h1 class="display-3 fw-bold mb-3">Trading Freelancer باسم عيد</h1>
-        <p class="fs-4 mt-3 mb-4">مضارب في الاسواق المالية و مبرمج  خبير تطوير أنظمة التداول المحترفة منذ 2013</p>
-        <div class="mt-4">
-          <a href="#contact" class="btn btn-primary btn-lg me-3">تواصل الآن</a>
-          <a href="#services" class="btn btn-outline-light btn-lg">تصفح قوة خدماتنا </a>
+<!-- شاشة التحميل -->
+<div id="loading">
+    <div class="loader"></div>
+</div>
+
+<!-- شريط التنقل -->
+<nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand" href="#home">B.E <span class="gradient-text">| مهندس التداول</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#home">الرئيسية</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">عن الخبير</a></li>
+                <li class="nav-item"><a class="nav-link" href="#skills">المهارات</a></li>
+                <li class="nav-item"><a class="nav-link" href="#services">الخدمات</a></li>
+                <li class="nav-item"><a class="nav-link" href="#portfolio">الأعمال</a></li>
+                <li class="nav-item"><a class="nav-link" href="#pricing">الباقات</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">تواصل</a></li>
+            </ul>
         </div>
-      </div>
     </div>
-  </div>
-</header>
+</nav>
 
-<!-- About -->
-<section class="py-5">
-  <div class="container">
-    <h2 class="section-title">من أنا؟</h2>
-    <p>أنا <strong>باسم عيد</strong>، مؤسس أكاديمية B.E Acadmy ومطور أنظمة التداول منذ أكثر من 10 سنوات. أقدم خدمات شاملة تشمل</p>
-    <ul>
-      <li>🚀 أكاديمية متكاملة لتأهيل المتداولين تأهيلاً احترافيًا</li>
-      <li>📊 برمجة أدوات تداول متقدمة (إكسبرتات، مؤشرات، أنظمة نسخ صفقات)</li>
-      <li> تصميم منحنيات مخاطر مخصصة لكل متداول</li>
-      <li> تدريب متقدم على إدارة رؤوس الأموال والتعامل مع كبار المستثمرين</li>
-      <li> أنظمة حماية متكاملة لإدارة المخاطر والأموال</li>
-    </ul>
-  </div>
+<!-- القسم الرئيسي (Hero) -->
+<section id="home" class="hero">
+    <div class="hero-bg"></div>
+    <div class="floating-circles">
+        <div class="circle" style="width: 300px; height: 300px; top: -50px; right: -50px;"></div>
+        <div class="circle" style="width: 200px; height: 200px; bottom: 50px; left: 10%;"></div>
+        <div class="circle" style="width: 150px; height: 150px; top: 30%; right: 15%;"></div>
+    </div>
+    <div class="container hero-content">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="hero-badge"><i class="fas fa-code"></i> العميل يحلم وأنا أنفذ</span>
+                <h1>
+                    <span class="gradient-text">باسم عيد</span><br>
+                    <span style="font-size: 2.5rem;">مهندس مبرمجاتي أنظمة التداول<br>الكمي والـ HFT</span>
+                </h1>
+                <p class="lead mb-4">خبرة 12+ سنة في تحويل أفكار التداول إلى أنظمة ربحية. أكتب الكود لـ MT4/MT5، cTrader، TradingView، وأبني مواقع الويب التفاعلية.</p>
+                <div class="d-flex gap-3">
+                    <a href="#contact" class="btn btn-primary btn-lg" style="background: var(--grad-3); border: none; color: var(--primary); font-weight: 700;">ابدأ مشروعك الآن</a>
+                    <a href="#portfolio" class="btn btn-outline-light btn-lg">شاهد الإنجازات</a>
+                </div>
+                <div class="mt-5 d-flex gap-4">
+                    <div><i class="fas fa-check-circle text-info"></i> 150+ مشروع منجز</div>
+                    <div><i class="fas fa-check-circle text-info"></i> 200+ عميل راضٍ</div>
+                    <div><i class="fas fa-check-circle text-info"></i> دعم فني 24/7</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- Skills -->
-<section class="bg-light py-5">
-  <div class="container">
-    <h2 class="section-title">المهارات الأساسية</h2>
-    <div>
-      <span class="tag">MQL4 / MQL5</span>
-      <span class="tag">TradingView (Pine Script)</span>
-      <span class="tag">HTML / PHP / MySQL / JSON</span>
-      <span class="tag">MT4 / MT5 Integration</span>
-      <span class="tag">Volume Aggregation Systems</span>
-      <span class="tag">Elliott Wave Analysis</span>
-      <span class="tag">MTPredictor Automation</span>
-      <span class="tag">Risk Management Systems</span>
-      <span class="tag">Money Management</span>
-      <span class="tag">Fund Management</span>
+<!-- إحصائيات -->
+<section class="py-5" style="background: var(--secondary);">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="stat-box">
+                    <div class="stat-number counter" data-target="12">12</div>
+                    <div>سنة خبرة</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-box">
+                    <div class="stat-number counter" data-target="500">500</div>
+                    <div>مشروع منجز</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-box">
+                    <div class="stat-number counter" data-target="200">200</div>
+                    <div>عميل راضٍ</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-box">
+                    <div class="stat-number counter" data-target="7">7</div>
+                    <div>أيام للتسليم</div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </section>
 
-<!-- Projects -->
-<section class="py-5">
-  <div class="container">
-    <h2 class="section-title">مشاريع مميزة</h2>
-    <div class="mb-5">
-      <h5>📊 نظام فوليوم مجمع</h5>
-      <p>دمج بيانات الشموع والفوليوم من عدة بروكرات، وعرضها في الوقت الحقيقي على منصات التداول</p>
-      
+<!-- من أنا -->
+<section id="about" class="py-5">
+    <div class="container">
+        <h2 class="section-title">من هو باسم عيد؟</h2>
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <p class="lead">مبرمج أنظمة تداول منذ 2013، مؤسس B.E Academy، ومطور حلول HFT و Arbitrage و AI. حولت أحلام مئات العملاء إلى أكواد تعمل على MT4/MT5، cTrader، TradingView، ومواقع ويب.</p>
+                <p>لا أبيع "أكسبيرتات جاهزة"، بل أصمم حلولاً مخصصة تناسب استراتيجيتك تماماً. سواء كنت تريد نسخ صفقات من ميتاتريدر إلى cTrader، أو بناء مؤشر TradingView فائز، أو حتى مشروع تخرج جامعي، أنا هنا لأجعله حقيقة.</p>
+                <div class="row mt-4">
+                    <div class="col-6"><i class="fas fa-tachometer-alt text-info"></i> HFT & Latency</div>
+                    <div class="col-6"><i class="fas fa-copy text-info"></i> Copy Trading</div>
+                    <div class="col-6"><i class="fas fa-chart-line text-info"></i> MTPredictor Integration</div>
+                    <div class="col-6"><i class="fas fa-globe text-info"></i> Full Stack Dev</div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="mb-5">
-      <h5>🔁 نظام نسخ صفقات متعدد الحسابات</h5>
-      <p>حلول متقدمة لنسخ الأوامر بين حسابات مختلفة مع مراعاة رأس المال والتوقيت بدقة</p>
-    </div>
-    <div class="mb-4">
-      <h5>تحليل احترافي باستخدام MTPredictor</h5>
-      <p>دمج أدوات MTPredictor داخل أنظمة التحليل لتوليد مناطق الانعكاس القوية، وتوقعات موجات إليوت، مع رسائل تنبيه تلقائي</p>
-      
-    </div>
-  </div>
 </section>
 
-<!-- Services -->
-<section class="bg-services py-5" id="services">
-  <div class="container">
-    <h2 class="section-title">الخدمات</h2>
-    <ul class="list-unstyled fs-5 lh-lg">
-      <li>✅ تصميم إكسبرتات حسب الطلب لأي فكرة تداول</li>
-      <li>✅ برمجة مؤشرات احترافية لـ MT4 / MT5 / TradingView</li>
-      <li>✅ ربط البيانات مع مواقعك باستخدام PHP / API / JSON</li>
-      <li>✅ أنظمة نسخ أوتوماتيكية للصفقات بين الحسابات</li>
-      <li>✅ تحليل متقدم باستخدام MTPredictor و Elliott Waves</li>
-      <li>✅ تأهيل وتعليم التداول من الصفر حتى الاحتراف (نظري + عملي)</li>
-    </ul>
-  </div>
-</section>
-
-<!-- Training -->
-
-
-<!-- Contact -->
-<section class="bg-contact py-5" id="contact">
-  <div class="container">
-    
-    <p class="fs-5">للتواصل المباشر أو الانضمام لعائليتنا</p>
-    <div class="contact">
-      <p>📱 <a href="https://wa.me/00201101400228" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> واتس آب: 00201101400228</a></p>
-      <p>💬 تيليجرام: <a href="https://t.me/Basemtp" target="_blank" rel="noopener"><i class="fab fa-telegram"></i> @Basemtp</a></p>
-      <p>📢 الجروب العام: <a href="https://t.me/tradegolde" target="_blank" rel="noopener">اضغط هنا</a></p>
+<!-- المهارات -->
+<section id="skills" class="py-5" style="background: var(--secondary);">
+    <div class="container">
+        <h2 class="section-title">المهارات الفائقة</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-category">
+                    <h4><i class="fas fa-chart-bar text-info"></i> Trading Platforms</h4>
+                    <div>
+                        <span class="skill-tag">MQL4/MQL5 Master</span>
+                        <span class="skill-tag">TradingView (Pine)</span>
+                        <span class="skill-tag">cTrader (C#)</span>
+                        <span class="skill-tag">MT4/5 API</span>
+                        <span class="skill-tag">HFT Optimization</span>
+                        <span class="skill-tag">Elliott Wave (MTP)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-category">
+                    <h4><i class="fas fa-code text-info"></i> Web Development</h4>
+                    <div>
+                        <span class="skill-tag">HTML/CSS/JS</span>
+                        <span class="skill-tag">PHP & MySQL</span>
+                        <span class="skill-tag">Python (Flask/Django)</span>
+                        <span class="skill-tag">React.js</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">API Integration</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-category">
+                    <h4><i class="fas fa-robot text-info"></i> Trading Tools</h4>
+                    <div>
+                        <span class="skill-tag">Arbitrage Bots</span>
+                        <span class="skill-tag">Copy Trading Systems</span>
+                        <span class="skill-tag">Smart Indicators</span>
+                        <span class="skill-tag">Risk Management</span>
+                        <span class="skill-tag">AI Predictions</span>
+                        <span class="skill-tag">Volume Analysis</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-category">
+                    <h4><i class="fas fa-plug text-info"></i> APIs & Integration</h4>
+                    <div>
+                        <span class="skill-tag">MT4/5 Web API</span>
+                        <span class="skill-tag">Telegram Bots</span>
+                        <span class="skill-tag">Discord Webhooks</span>
+                        <span class="skill-tag">Binance/Bybit API</span>
+                        <span class="skill-tag">TradingView Alerts</span>
+                        <span class="skill-tag">Database Sync</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <h4 class="mt-4">✨ انضم من خلالنا واستفد من البونصات والدعم والتوصيات</h4>
-    <ul class="fs-5">
-      <li><a href="https://register.hfm.com/sv/en/new-live-account/?refid=30422211" target="_blank" rel="noopener">🔥 HFM (HotForex) - حساب مميز + دعم شخصي</a></li>
-      <li><a href="https://fbs.partners?ibl=89601&amp;ibp=782846" target="_blank" rel="noopener">🔥 FBS - بونصات وعروض حصرية</a></li>
-      <li><a href="https://one.exnesstrack.org/boarding/sign-up/200235/a/v9ayiy8sni?lng=ar" target="_blank" rel="noopener">🔥 Exness - صفحة التسجيل</a></li>
-      <li><a href="https://one.exnesstrack.org/a/v9ayiy8sni?platform=mobile" target="_blank" rel="noopener">🔥 Exness - الموبايل</a></li>
-      <li><a href="https://clicks.pipaffiliates.com/c?c=708488&amp;l=ar&amp;p=1" target="_blank" rel="noopener">🔥XM  PC  الرابط الأول</a></li>
-      <li><a href="https://clicks.pipaffiliates.com/c?c=708488&amp;l=ar&amp;a=true" target="_blank" rel="noopener">🔥 XM  phone - الرابط الثاني</a></li>
-    </ul>
-  </div>
 </section>
 
+<!-- الخدمات -->
+<section id="services" class="py-5">
+    <div class="container">
+        <h2 class="section-title">خدمات احترافية</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-bolt"></i></div>
+                    <h4>أنظمة HFT</h4>
+                    <p>تداول عالي التردد مع أقل تأخير. أكواد محسنة للأداء.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Low-latency architecture</li>
+                        <li><i class="fas fa-check"></i> Kernel bypass</li>
+                        <li><i class="fas fa-check"></i> FPGA ready</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-copy"></i></div>
+                    <h4>نسخ الصفقات MT4/5 → cTrader</h4>
+                    <p>انقل صفقاتك بين أي منصة بسلاسة مع إدارة المخاطر.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Reverse copy</li>
+                        <li><i class="fas fa-check"></i> Lot multiplier</li>
+                        <li><i class="fas fa-check"></i> Filter by symbol</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+                    <h4>مؤشرات TradingView فائزة</h4>
+                    <p>حوّل استراتيجيتك إلى مؤشر مع إشارات واضحة.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Alert conditions</li>
+                        <li><i class="fas fa-check"></i> Backtesting</li>
+                        <li><i class="fas fa-check"></i> Multi-timeframe</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-wave-square"></i></div>
+                    <h4>MTPredictor & Elliott Wave</h4>
+                    <p>دمج قوة MTPredictor مع منصاتك المفضلة.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Auto wave count</li>
+                        <li><i class="fas fa-check"></i> Projection zones</li>
+                        <li><i class="fas fa-check"></i> Alert on patterns</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-globe"></i></div>
+                    <h4>تطوير مواقع ويب متكاملة</h4>
+                    <p>لوحات تحكم، متاجر إلكترونية، مواقع شخصية.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Responsive design</li>
+                        <li><i class="fas fa-check"></i> Admin dashboard</li>
+                        <li><i class="fas fa-check"></i> API integration</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h4>مشاريع التخرج الجامعية</h4>
+                    <p>أشرف وأبرمج مشروعك باحترافية.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Documentation</li>
+                        <li><i class="fas fa-check"></i> Source code</li>
+                        <li><i class="fas fa-check"></i> Presentation prep</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- معرض الأعمال -->
+<section id="portfolio" class="py-5" style="background: var(--secondary);">
+    <div class="container">
+        <h2 class="section-title">أعمال خالدة</h2>
+        <div class="portfolio-filter">
+            <span class="filter-btn active" data-filter="all">الكل</span>
+            <span class="filter-btn" data-filter="hft">HFT</span>
+            <span class="filter-btn" data-filter="arbitrage">Arbitrage</span>
+            <span class="filter-btn" data-filter="indicators">مؤشرات</span>
+            <span class="filter-btn" data-filter="web">مواقع</span>
+            <span class="filter-btn" data-filter="copy">نسخ صفقات</span>
+            <span class="filter-btn" data-filter="mtp">MTP & Elliott</span>
+        </div>
+        <div class="row g-4 portfolio-container">
+            <!-- HFT Bot -->
+            <div class="col-md-6 col-lg-4 portfolio-item" data-category="hft">
+                <div class="portfolio-card">
+                    <span class="portfolio-badge">HFT</span>
+                    <h4>نظام HFT للأخبار</h4>
+                    <p>إكسبرت يدخل الصفقات خلال 5ms من صدور الخبر، مع تحليل immediate price reaction.</p>
+                    <div class="tech-stack">
+                        <span>MQL5</span><span>C++</span><span>ZeroMQ</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Arbitrage -->
+            <div class="col-md-6 col-lg-4 portfolio-item" data-category="arbitrage">
+                <div class="portfolio-card">
+                    <span class="portfolio-badge">Arbitrage</span>
+                    <h4>Arbitrage بين HFM و Exness</h4>
+                    <p>بوت يكتشف فروق الأسعار بين بروكرين وينفذ الصفقات خلال milliseconds.</p>
+                    <div class="tech-stack">
+                        <span>MQL4</span><span>Python</span><span>WebSocket</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Copy Trading -->
+            <div class="col-md-6 col-lg-4 portfolio-item" data-category="copy">
+                <div class="portfolio-card">
+                    <span class="portfolio-badge">Copy Trading</span>
+                    <h4>Universal Trade Copier</h4>
+                    <p>MT4 → MT5 → cTrader مع دعم الشبكات الخاصة و VPS.</p>
+                    <div class="tech-stack">
+                        <span>C#</span><span>MQL</span><span>REST API</span>
+                    </div>
+                </div>
+            </div>
+            <!-- MTP -->
+            <div class="col-md-6 col-lg-4 portfolio-item" data-category="mtp">
+                <div class="portfolio-card">
+                    <span class="portfolio-badge">MTPredictor</span>
+                    <h4>دمج  MTPREDCTOR مدي الحياه مع MT5</h4>
+                    <p>مؤشر يرسم Zones من MTP مباشرة على شارتMT4 & MT5 مع تنبيهات.</p>
+                    <div class="tech-stack">
+                        <span>MQL5</span><span>DLL</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Indicators -->
+            <div class="col-md-6 col-lg-4 portfolio-item" data-category="indicators">
+                <div class="portfolio-card">
+                    <span class="portfolio-badge">مؤشرات</span>
+                    <h4>مؤشر Supply & Demand Smart</h4>
+                    <p>مؤشر ذكي على TradingView يرسم مناطق العرض والطلب مع تصفية المناطق الضعيفة.</p>
+                    <div class="tech-stack">
+                        <span>Pine Script</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Web -->
+            <div class="col-md-6 col-lg-4 portfolio-item" data-category="web">
+                <div class="portfolio-card">
+                    <span class="portfolio-badge">موقع ويب</span>
+                    <h4>منصة B.E Academy</h4>
+                    <p>منصة تعليمية متكاملة تحتوي على كورسات، اختبارات، وشهادات معتمدة.</p>
+                    <div class="tech-stack">
+                        <span>PHP</span><span>MySQL</span><span>Bootstrap</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- بطاقات الأسعار -->
+<section id="pricing" class="py-5">
+    <div class="container">
+        <h2 class="section-title">باقات مرنة</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="pricing-card">
+                    <h4>إكسبرت بسيط</h4>
+                    <div class="price">$100 <small>/ للمشروع</small></div>
+                    <ul class="list-unstyled mt-3">
+                        <li><i class="fas fa-check text-info"></i> فكرة واحدة</li>
+                        <li><i class="fas fa-check text-info"></i> حتى 5 ملفات</li>
+                        <li><i class="fas fa-check text-info"></i> شرح أساسي</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline-info w-100 mt-3">اطلب الآن</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="pricing-card featured">
+                    <h4>نظام HFT</h4>
+                    <div class="price">$300+</div>
+                    <ul class="list-unstyled mt-3">
+                        <li><i class="fas fa-check text-info"></i> تحسين أداء عالي</li>
+                        <li><i class="fas fa-check text-info"></i> دعم VPS</li>
+                        <li><i class="fas fa-check text-info"></i> كود مفتوح المصدر</li>
+                        <li><i class="fas fa-check text-info"></i> تحديثات 3 شهور</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-info w-100 mt-3">الأكثر طلباً</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="pricing-card">
+                    <h4>موقع ويب متكامل</h4>
+                    <div class="price">$200+</div>
+                    <ul class="list-unstyled mt-3">
+                        <li><i class="fas fa-check text-info"></i> تصميم مخصص</li>
+                        <li><i class="fas fa-check text-info"></i> لوحة تحكم</li>
+                        <li><i class="fas fa-check text-info"></i> استضافة سنة</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline-info w-100 mt-3">اطلب الآن</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="pricing-card">
+                    <h4>مشروع تخرج</h4>
+                    <div class="price">$150+</div>
+                    <ul class="list-unstyled mt-3">
+                        <li><i class="fas fa-check text-info"></i> كود + تقرير</li>
+                        <li><i class="fas fa-check text-info"></i> فيديو شرح</li>
+                        <li><i class="fas fa-check text-info"></i> تدريب على العرض</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline-info w-100 mt-3">اطلب الآن</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- شهادات العملاء -->
+<section class="py-5" style="background: var(--secondary);">
+    <div class="container">
+        <h2 class="section-title">ماذا يقول العملاء</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"باسم حوّل فكرة نظام الـ arbitrage المعقدة إلى إكسبرت يعمل بكل دقة. أرباحي تضاعفت."</p>
+                    <div class="client-info">
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="client">
+                        <div>
+                            <h6>أحمد عبدالله</h6>
+                            <small>متداول محترف</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"سلمني مشروع تخرجي كامل بالكود والتوثيق. نلت درجة الامتياز بفضل الله ثم بفضله."</p>
+                    <div class="client-info">
+                        <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="client">
+                        <div>
+                            <h6>سارة محمد</h6>
+                            <small>طالبة ماجستير</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"خدمة نسخ الصفقات من MT4 إلى cTrader تعمل بسلاسة تامة. فريق الدعم متعاون جداً."</p>
+                    <div class="client-info">
+                        <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="client">
+                        <div>
+                            <h6>خالد العمري</h6>
+                            <small>مدير صندوق كنت اعمل دوما يدوي لكن باسم جعلني فقط اباشر العمل فعلا مبدع </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- التواصل -->
+<section id="contact" class="py-5">
+    <div class="container">
+        <h2 class="section-title">تواصل معي الآن</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="contact-card">
+                    <h4 class="mb-4"><i class="fas fa-paper-plane text-info"></i> راسلني مباشرة</h4>
+                    <a href="https://wa.me/00201101400228" target="_blank" class="contact-link"><i class="fab fa-whatsapp fa-2x text-success"></i> واتس آب: 00201101400228</a>
+                    <a href="https://t.me/Basemtp" target="_blank" class="contact-link"><i class="fab fa-telegram fa-2x text-info"></i> تيليجرام: @Basemtp</a>
+                    <a href="mail: satmelano11@gmail.com" class="contact-link"><i class="fas fa-envelope fa-2x text-warning"></i> satmelano11@gmail.com</a>
+                    <a href="https://t.me/tradegolde" target="_blank" class="contact-link"><i class="fab fa-telegram-plane fa-2x text-primary"></i> الجروب العام</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="contact-card">
+                    <h4 class="mb-4"><i class="fas fa-handshake text-info"></i>  روابط البروكرات افتح حساب في وكالاتناو تمتع بمزايا و خصومات كبيره و بعض الادوات اامدفوعة تصبح مجانيه افتح الحساب و اتمم الايداع ب بدايه من 50 دولار وو تواصل معي فورا ستنضم لتوصيات لم تراها من قبل </h4>
+                    <div>
+                        <a href="https://register.hfm.com/sv/en/new-live-account/?refid=30422211" target="_blank" class="broker-link">🔥 HFM</a>
+                        <a href="https://fbs.partners?ibl=89601&ibp=782846" target="_blank" class="broker-link">🔥 FBS</a>
+                        <a href="https://one.exnesstrack.org/boarding/sign-up/200235/a/v9ayiy8sni?lng=ar" target="_blank" class="broker-link">🔥 Exness</a>
+                        <a href="https://clicks.pipaffiliates.com/c?c=708488&l=ar&p=1" target="_blank" class="broker-link">🔥 XM</a>
+                    </div>
+                    <h5 class="mt-4">طرق الدفع:</h5>
+                    <p><i class="fas fa-money-bill-wave text-success"></i> Instapay - USDT (TRC20) فودافون كاش- تحويل بنكي</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
 <footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 text-md-right">
-        جميع الحقوق محفوظة © 2025 - باسم عيد
-      </div>
-      <div class="col-md-6">
-        <a href="#top" class="text-light">عودة للأعلى</a>
-      </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>جميع الحقوق محفوظة © 2025 - باسم عيد | مهندس أنظمة التداول</p>
+            </div>
+            <div class="col-md-6 text-md-left">
+                <a href="#" class="text-light me-3"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-light me-3"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="text-light"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
     </div>
-  </div>
 </footer>
 
-<!-- Scroll to Top -->
-<div id="toTop" style="display: block;"><i class="fas fa-arrow-up"></i></div>
+<!-- زر العودة للأعلى -->
+<div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  const toTop = document.getElementById("toTop");
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 300) { toTop.style.display = "block"; }
-    else { toTop.style.display = "none"; }
-  });
-  toTop.addEventListener("click", () => { window.scrollTo({top: 0, behavior: "smooth"}); });
+    // إخفاء شاشة التحميل
+    window.addEventListener('load', function() {
+        document.getElementById('loading').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+        }, 500);
+    });
+
+    // شريط التنقل يتغير عند التمرير
+    window.addEventListener('scroll', function() {
+        const nav = document.getElementById('mainNav');
+        if (window.scrollY > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+
+    // تفعيل الروابط في شريط التنقل حسب القسم الظاهر
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', function() {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionHeight = section.clientHeight;
+            if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                current = section.getAttribute('id');
+            }
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+    // عداد الأرقام المتحرك
+    const counters = document.querySelectorAll('.counter');
+    const speed = 200;
+    counters.forEach(counter => {
+        const updateCount = () => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+            const increment = target / speed;
+            if (count < target) {
+                counter.innerText = Math.ceil(count + increment);
+                setTimeout(updateCount, 10);
+            } else {
+                counter.innerText = target;
+            }
+        };
+        updateCount();
+    });
+
+    // فلتر الأعمال
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.getAttribute('data-filter');
+            portfolioItems.forEach(item => {
+                if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // زر العودة للأعلى
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('show');
+        } else {
+            backToTop.classList.remove('show');
+        }
+    });
+    backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 </script>
-
-
-
-</body></html>
+</body>
+</html>
